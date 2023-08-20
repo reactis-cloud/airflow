@@ -46,7 +46,7 @@ ARG AIRFLOW_USER_HOME_DIR=/home/airflow
 # latest released version here
 ARG AIRFLOW_VERSION="2.7.0"
 
-ARG PYTHON_BASE_IMAGE="python:3.8-slim-bullseye"
+ARG PYTHON_BASE_IMAGE="python:3.9-slim-bullseye"
 
 ARG AIRFLOW_PIP_VERSION=23.2.1
 ARG AIRFLOW_IMAGE_REPOSITORY="https://github.com/apache/airflow"
@@ -233,9 +233,9 @@ install_mysql_client() {
 
 install_mariadb_client() {
     if [[ "${1}" == "dev" ]]; then
-        packages=("libmariadb-dev" "mariadb-client-core-${MARIADB_VERSION}")
+        packages=("libmariadb-dev" "mariadb-client")
     elif [[ "${1}" == "prod" ]]; then
-        packages=("mariadb-client-core-${MARIADB_VERSION}")
+        packages=("mariadb-client")
     else
         echo
         echo "Specify either prod or dev"
@@ -1174,14 +1174,14 @@ ARG INSTALL_PROVIDERS_FROM_SOURCES="false"
 # Of Airflow. Note That for local source installation you need to have local sources of
 # Airflow checked out together with the Dockerfile and AIRFLOW_SOURCES_FROM and AIRFLOW_SOURCES_TO
 # set to "." and "/opt/airflow" respectively.
-ARG AIRFLOW_INSTALLATION_METHOD="apache-airflow"
+ARG AIRFLOW_INSTALLATION_METHOD="."
 # By default we do not upgrade to latest dependencies
 ARG UPGRADE_TO_NEWER_DEPENDENCIES="false"
 # By default we install latest airflow from PyPI so we do not need to copy sources of Airflow
 # but in case of breeze/CI builds we use latest sources and we override those
 # those SOURCES_FROM/TO with "." and "/opt/airflow" respectively
-ARG AIRFLOW_SOURCES_FROM="Dockerfile"
-ARG AIRFLOW_SOURCES_TO="/Dockerfile"
+ARG AIRFLOW_SOURCES_FROM="."
+ARG AIRFLOW_SOURCES_TO="/opt/airflow"
 
 # By default we do not install from docker context files but if we decide to install from docker context
 # files, we should override those variables to "docker-context-files"
@@ -1228,7 +1228,7 @@ RUN if [[ -f /docker-context-files/pip.conf ]]; then \
     fi
 
 # Additional PIP flags passed to all pip install commands except reinstalling pip itself
-ARG ADDITIONAL_PIP_INSTALL_FLAGS=""
+ARG ADDITIONAL_PIP_INSTALL_FLAGS="mysql-connector-python kubernetes"
 
 ENV AIRFLOW_PIP_VERSION=${AIRFLOW_PIP_VERSION} \
     AIRFLOW_PRE_CACHED_PIP_PACKAGES=${AIRFLOW_PRE_CACHED_PIP_PACKAGES} \

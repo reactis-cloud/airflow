@@ -219,7 +219,7 @@
             <span class="material-icons text-muted js-tooltip" aria-hidden="true"
                   title="Logical Date/Time of the latest Dag Run.">info</span>
           </th>
-          <th style="width:180px;">{{ sortable_column("Next Run", "next_dagrun") }}
+          <th style="width:180px;">{{ sortable_column("Next Run", "next_dagrun_create_after") }}
             <span class="material-icons text-muted js-tooltip" aria-hidden="true"
                   title="Logical Date/Time interval of the next DAG Run, or for dataset triggered DAGs, how many datasets have been updated since the last DAG Run.">info</span>
           </th>
@@ -341,7 +341,7 @@
                 {%- endwith -%}
               {% endif %}
               {% if dag.next_dagrun is not none %}
-                <time datetime="{{ dag.next_dagrun }}">{{ dag.next_dagrun }}</time>
+                <time datetime="{{ dag.next_dagrun_create_after }}">{{ dag.next_dagrun_create_after }}</time>
               {% endif %}
               {% if dag.next_dagrun_create_after %}
                 {# data-nextrun is being used to pass next_dagrun dates to js to build the full tooltip #}

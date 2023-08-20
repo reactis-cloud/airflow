@@ -172,6 +172,7 @@ function lastDagRunsHandler(error, json) {
   Object.keys(json).forEach((safeDagId) => {
     const dagId = json[safeDagId].dag_id;
     const executionDate = json[safeDagId].execution_date;
+    const startDate = json[safeDagId].start_date;
     const g = d3.select(`#last-run-${safeDagId}`);
 
     // Show last run as a link to the graph view
@@ -183,7 +184,7 @@ function lastDagRunsHandler(error, json) {
         )}&execution_date=${encodeURIComponent(executionDate)}`
       )
       .html("")
-      .insert(isoDateToTimeEl.bind(null, executionDate, { title: false }));
+      .insert(isoDateToTimeEl.bind(null, startDate, { title: false }));
 
     // Only show the tooltip when we have a last run and add the json to a custom data- attribute
     g.selectAll("span")

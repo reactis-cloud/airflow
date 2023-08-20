@@ -856,7 +856,7 @@ class Airflow(AirflowBaseView):
                 dag_run_subquery = (
                     select(
                         DagRun.dag_id,
-                        sqla.func.max(DagRun.execution_date).label("max_execution_date"),
+                        sqla.func.max(DagRun.start_date).label("max_execution_date"),
                     )
                     .group_by(DagRun.dag_id)
                     .subquery()
@@ -1258,7 +1258,7 @@ class Airflow(AirflowBaseView):
         last_runs_subquery = (
             select(
                 DagRun.dag_id,
-                sqla.func.max(DagRun.execution_date).label("max_execution_date"),
+                sqla.func.max(DagRun.start_date).label("max_execution_date"),
             )
             .group_by(DagRun.dag_id)
             .where(DagRun.dag_id.in_(filter_dag_ids))  # Only include accessible/selected DAGs.
@@ -1278,7 +1278,7 @@ class Airflow(AirflowBaseView):
                 last_runs_subquery,
                 and_(
                     last_runs_subquery.c.dag_id == DagRun.dag_id,
-                    last_runs_subquery.c.max_execution_date == DagRun.execution_date,
+                    last_runs_subquery.c.max_execution_date == DagRun.start_date,
                 ),
             )
         )
